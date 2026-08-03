@@ -1,0 +1,12 @@
+[
+  {
+    "account_id": "A001",
+    "trade_count": 2,
+    "proceeds": 60.0
+  },
+  {
+    "account_id": "A002",
+    "trade_count": 1,
+    "proceeds": 45.0
+  }
+]

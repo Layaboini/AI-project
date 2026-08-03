@@ -1,0 +1,3 @@
+trade_id,account_id,quantity,price,status,trade_date
+T1,A001,1,50.00,filled,2024-05-01
+T2,A002,3,30.00,filled,2024-05-01

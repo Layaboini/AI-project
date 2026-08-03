@@ -1,0 +1,7 @@
+trade_id,account_id,quantity,price,status,trade_date
+X1,A001,2,10.00,filled,2024-01-05
+X2,A001,1,40.00,filled,2024-01-09
+X3,A002,3,15.00,filled,2024-01-10
+X4,A002,1,15.00,partially_filled,2024-01-11
+X5,A003,2,50.00,cancelled,2024-01-12
+X6,A001,x,10.00,filled,2024-01-13

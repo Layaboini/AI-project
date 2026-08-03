@@ -1,0 +1,12 @@
+[
+  {
+    "account_id": "A001",
+    "net_value": 150.0,
+    "trade_count": 1
+  },
+  {
+    "account_id": "A002",
+    "net_value": -200.0,
+    "trade_count": 1
+  }
+]
