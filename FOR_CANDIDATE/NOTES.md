@@ -30,3 +30,8 @@ Track A is Java 17 + Maven. Phase 4 stays in C# because the provided engine is C
   with a different assistant and followed as a procedure (see `phase4/WORKFLOW.md`).
 - `prompts/prompt-history.md` is hash-chained and verifiable, but entries are summaries and the first
   entry has identifying details redacted.
+
+## Chat transcript
+The exported chat session is in [`out/chat-transcript.zip`](out/chat-transcript.zip) (conversation
+transcript plus session metadata). Personal and employer identifiers were replaced with placeholders
+before it was added; the conversation content is otherwise unchanged.
