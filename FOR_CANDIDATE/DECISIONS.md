@@ -17,3 +17,13 @@
 - The header row and blank lines are not data rows and are not counted as skipped.
 - `proceeds` is written as a JSON number with two decimals (`60.00`, equal to `60`).
 - Skipped count is printed to stderr as a bare integer.
+
+## Phase 2
+- Reuses `TradeCsvParser` (same malformed-row rules as Phase 1) and `Notional`.
+- `accounts.csv`: header skipped; a row with fewer than 3 columns or a blank `account_id`/`region`
+  is ignored (the account then resolves to `UNKNOWN`). If an `account_id` appears twice, the first
+  row wins. Extra columns are tolerated.
+- Cancelled trades are excluded from both `trade_count` and `net_value`; busted trades count and
+  subtract. Rounding happens once per group (sum first, then round), not per trade.
+- Sort is ordinal: `UNKNOWN` sorts before `US`, matching the worked example.
+- Run: `java -jar track-a/target/trade-proceeds.jar phase2`.

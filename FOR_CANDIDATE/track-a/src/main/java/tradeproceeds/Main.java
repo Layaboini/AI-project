@@ -7,7 +7,10 @@ import java.util.Map;
 
 /** CLI entry point. Run from the FOR_CANDIDATE directory so default paths resolve. */
 public final class Main {
-    private static final String USAGE = "usage: phase1 [--trades PATH] [--out PATH]";
+    private static final String USAGE =
+            "usage:\n"
+            + "  phase1 [--trades PATH] [--out PATH]\n"
+            + "  phase2 [--trades PATH] [--accounts PATH] [--out PATH]";
 
     public static void main(String[] args) {
         System.exit(run(args));
@@ -19,11 +22,16 @@ public final class Main {
             return 1;
         }
         Map<String, String> opts = options(args);
+        Path trades = Path.of(opts.getOrDefault("trades", "data/trades.csv"));
         try {
             switch (args[0]) {
                 case "phase1":
-                    Phase1.run(Path.of(opts.getOrDefault("trades", "data/trades.csv")),
-                               Path.of(opts.getOrDefault("out", "out/phase1.json")));
+                    Phase1.run(trades, Path.of(opts.getOrDefault("out", "out/phase1.json")));
+                    return 0;
+                case "phase2":
+                    Phase2.run(trades,
+                               Path.of(opts.getOrDefault("accounts", "data/accounts.csv")),
+                               Path.of(opts.getOrDefault("out", "out/phase2.csv")));
                     return 0;
                 default:
                     System.err.println(USAGE);
