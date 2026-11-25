@@ -5,31 +5,21 @@ namespace TradeEngine.Domain;
 /// <summary>Replays events over the base blotter to produce current state.</summary>
 public static class StateBuilder
 {
+    /// <summary>
+    /// One-shot replay. Delegates to <see cref="TradeLedger"/> so there is a single
+    /// implementation of ordering and idempotency (each event_id applies once).
+    /// </summary>
     public static Dictionary<string, Trade> Build(
         IEnumerable<Trade> baseTrades,
         IEnumerable<TradeEvent> events)
     {
-        var state = new Dictionary<string, Trade>();
-        foreach (var t in baseTrades)
-            state[t.TradeId] = t.Clone();
-
-        var ordered = events
-            .OrderBy(e => e.Timestamp, StringComparer.Ordinal)
-            .ThenBy(e => e.EventId, StringComparer.Ordinal);
-
-        // Events can be delivered more than once (e.g. the same event in two batch
-        // files). Apply each event_id only the first time it is seen in replay order.
-        var applied = new HashSet<string>(StringComparer.Ordinal);
-        foreach (var e in ordered)
-        {
-            if (!applied.Add(e.EventId)) continue;
-            Apply(state, e);
-        }
-
-        return state;
+        var ledger = new TradeLedger(baseTrades);
+        ledger.Ingest(events);
+        return new Dictionary<string, Trade>(ledger.Trades);
     }
 
-    private static void Apply(Dictionary<string, Trade> state, TradeEvent e)
+    /// <summary>Applies a single event to the state in place.</summary>
+    internal static void Apply(Dictionary<string, Trade> state, TradeEvent e)
     {
         switch (e.Type)
         {

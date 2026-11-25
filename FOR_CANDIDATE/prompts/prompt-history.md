@@ -50,3 +50,9 @@ below in the same format before submitting.
 **Prev:** 8a78ef815195d049599e524ba428a65ad3af83890a1532404e2529cee2ad7b06
 **Hash:** 3b3e3473b62ec3a8b8c9dfc5e0f1ff281541ffcaa7849059e68f3941db28a145
 
+### 2026-11-25T13:14:13Z
+**Prompt:** (continuation) proceed with phase 4c
+**Action:** Added TradeLedger (incremental state), SCALE.md, tests
+**Prev:** 3b3e3473b62ec3a8b8c9dfc5e0f1ff281541ffcaa7849059e68f3941db28a145
+**Hash:** ebf91abc9ad181d03e5e44908e569b16b2a768b1fba36cf9251fd293a4395375
+

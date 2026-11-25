@@ -8,14 +8,14 @@ public sealed record StatusResult(string Status, decimal NetValue, int TradeCoun
 /// <summary>Reports net value grouped by trade status, after events are applied.</summary>
 public sealed class ValueByStatusQuery
 {
-    private readonly IReadOnlyList<Trade> _baseTrades;
-    private readonly IReadOnlyList<TradeEvent> _events;
+    private readonly TradeLedger _ledger;
 
     public ValueByStatusQuery(IReadOnlyList<Trade> baseTrades, IReadOnlyList<TradeEvent> events)
+        : this(BuildLedger(baseTrades, events))
     {
-        _baseTrades = baseTrades;
-        _events = events;
     }
+
+    public ValueByStatusQuery(TradeLedger ledger) => _ledger = ledger;
 
     /// <summary>
     /// Groups the counted trades (everything except cancelled, per
@@ -23,14 +23,8 @@ public sealed class ValueByStatusQuery
     /// </summary>
     public IReadOnlyList<StatusResult> Run()
     {
-        var state = StateBuilder.Build(_baseTrades, _events);
-        return Aggregate(state.Values);
-    }
-
-    internal static IReadOnlyList<StatusResult> Aggregate(IEnumerable<Trade> trades)
-    {
         var agg = new Dictionary<string, (decimal Net, int Count)>(StringComparer.Ordinal);
-        foreach (var t in trades)
+        foreach (var t in _ledger.Trades.Values)
         {
             if (!RevenueCalculator.Counts(t)) continue;
 
@@ -42,5 +36,12 @@ public sealed class ValueByStatusQuery
             .Select(kv => new StatusResult(kv.Key, kv.Value.Net, kv.Value.Count))
             .OrderBy(r => r.Status, StringComparer.Ordinal)
             .ToList();
+    }
+
+    private static TradeLedger BuildLedger(IReadOnlyList<Trade> baseTrades, IReadOnlyList<TradeEvent> events)
+    {
+        var ledger = new TradeLedger(baseTrades);
+        ledger.Ingest(events);
+        return ledger;
     }
 }

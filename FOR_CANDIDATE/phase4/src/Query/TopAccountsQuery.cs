@@ -8,21 +8,21 @@ public sealed record AccountResult(string AccountId, decimal NetValue, int Trade
 /// <summary>Ranks accounts by net value within a date window.</summary>
 public sealed class TopAccountsQuery
 {
-    private readonly IReadOnlyList<Trade> _baseTrades;
-    private readonly IReadOnlyList<TradeEvent> _events;
+    private readonly TradeLedger _ledger;
 
+    /// <summary>Replays the events once; every later <see cref="Run"/> reuses that state.</summary>
     public TopAccountsQuery(IReadOnlyList<Trade> baseTrades, IReadOnlyList<TradeEvent> events)
+        : this(BuildLedger(baseTrades, events))
     {
-        _baseTrades = baseTrades;
-        _events = events;
     }
+
+    /// <summary>Queries a shared, long-lived ledger (events may keep arriving between runs).</summary>
+    public TopAccountsQuery(TradeLedger ledger) => _ledger = ledger;
 
     public IReadOnlyList<AccountResult> Run(string start, string end, int limit, int offset)
     {
-        var state = StateBuilder.Build(_baseTrades, _events);
-
         var agg = new Dictionary<string, (decimal Net, int Count)>();
-        foreach (var t in state.Values)
+        foreach (var t in _ledger.Trades.Values)
         {
             if (!RevenueCalculator.Counts(t)) continue;
             if (string.CompareOrdinal(t.TradeDate, start) < 0) continue;
@@ -39,5 +39,12 @@ public sealed class TopAccountsQuery
             .Skip(offset)
             .Take(limit)
             .ToList();
+    }
+
+    private static TradeLedger BuildLedger(IReadOnlyList<Trade> baseTrades, IReadOnlyList<TradeEvent> events)
+    {
+        var ledger = new TradeLedger(baseTrades);
+        ledger.Ingest(events);
+        return ledger;
     }
 }
