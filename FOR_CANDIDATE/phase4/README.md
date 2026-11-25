@@ -22,10 +22,12 @@ src/
   Parsing/EventLoader      Loads events from every JSON file in a dir
   Domain/StateBuilder      Replays events over the blotter
   Domain/RevenueCalculator Net-value rules by status
+  Domain/TradeLedger       Incremental current state (replay once)
   Query/TopAccountsQuery   Ranks accounts by net value in a date window
+  Query/ValueByStatusQuery Net value grouped by status
 tests/                     xUnit tests
 data/                      Sample blotter + event batches
-.github/                   Example skill/agent/prompt stubs (replace with yours)
+.github/                   Skill, agents and prompt (engine-change, engine-engineer, engine-reviewer)
 ```
 
 ## Data model
