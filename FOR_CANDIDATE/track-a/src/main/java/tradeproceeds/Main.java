@@ -10,7 +10,9 @@ public final class Main {
     private static final String USAGE =
             "usage:\n"
             + "  phase1 [--trades PATH] [--out PATH]\n"
-            + "  phase2 [--trades PATH] [--accounts PATH] [--out PATH]";
+            + "  phase2 [--trades PATH] [--accounts PATH] [--out PATH]\n"
+            + "  top-accounts --start YYYY-MM-DD --end YYYY-MM-DD --limit N --offset N\n"
+            + "               [--trades PATH] [--events DIR]";
 
     public static void main(String[] args) {
         System.exit(run(args));
@@ -33,13 +35,31 @@ public final class Main {
                                Path.of(opts.getOrDefault("accounts", "data/accounts.csv")),
                                Path.of(opts.getOrDefault("out", "out/phase2.csv")));
                     return 0;
+                case "top-accounts":
+                    System.out.println(Phase3.topAccounts(trades,
+                            Path.of(opts.getOrDefault("events", "data/events")),
+                            opts.getOrDefault("start", ""), opts.getOrDefault("end", ""),
+                            intOption(opts, "limit"), intOption(opts, "offset")));
+                    return 0;
                 default:
                     System.err.println(USAGE);
                     return 1;
             }
+        } catch (TopAccountsQuery.InvalidQueryException e) {
+            System.err.println("error: " + e.getMessage());
+            return 1;
         } catch (IOException e) {
             System.err.println("error: " + e.getMessage());
             return 1;
+        }
+    }
+
+    /** Missing or non-numeric values become Integer.MIN_VALUE, which validation then rejects. */
+    private static int intOption(Map<String, String> opts, String key) {
+        try {
+            return Integer.parseInt(opts.getOrDefault(key, ""));
+        } catch (NumberFormatException e) {
+            return Integer.MIN_VALUE;
         }
     }
 

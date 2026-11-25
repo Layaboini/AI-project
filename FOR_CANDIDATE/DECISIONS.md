@@ -27,3 +27,11 @@
   subtract. Rounding happens once per group (sum first, then round), not per trade.
 - Sort is ordinal: `UNKNOWN` sorts before `US`, matching the worked example.
 - Run: `java -jar track-a/target/trade-proceeds.jar phase2`.
+
+## Phase 3
+- Interface is a CLI command: `top-accounts --start --end --limit --offset [--trades] [--events]`;
+  prints a JSON array to stdout. Invalid parameters give `error: ...` on stderr and exit code 1.
+- `new` on an existing `trade_id` fully replaces it (not a merge). Other event rules, ordering and
+  idempotency are described in `DESIGN.md`.
+- A non-numeric `--limit`/`--offset` is reported as the same "must be a ... integer" error.
+- A missing events directory is treated as "no events".

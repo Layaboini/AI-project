@@ -73,6 +73,10 @@ public final class TradeCsvParser {
         return t;
     }
 
+    public static boolean isValidStatus(String s) {
+        return s != null && VALID_STATUSES.contains(s);
+    }
+
     public static boolean isDate(String s) {
         if (s == null || s.length() != 10) return false;
         try {
