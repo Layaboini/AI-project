@@ -17,8 +17,14 @@ public static class StateBuilder
             .OrderBy(e => e.Timestamp, StringComparer.Ordinal)
             .ThenBy(e => e.EventId, StringComparer.Ordinal);
 
+        // Events can be delivered more than once (e.g. the same event in two batch
+        // files). Apply each event_id only the first time it is seen in replay order.
+        var applied = new HashSet<string>(StringComparer.Ordinal);
         foreach (var e in ordered)
+        {
+            if (!applied.Add(e.EventId)) continue;
             Apply(state, e);
+        }
 
         return state;
     }

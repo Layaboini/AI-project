@@ -38,3 +38,9 @@ below in the same format before submitting.
 **Prev:** afd0281a4d37ea5ea1e8796c72dbfe931f84ea75578ff294123dc3cf702d82f5
 **Hash:** dcc9eefbdd18b7c71f6228b4c9276c919ec5a08b8aa3a5506251363362d9a630
 
+### 2026-11-25T13:12:32Z
+**Prompt:** (continuation) proceed with phase 4a
+**Action:** Wrote failing idempotency tests, then dedupe by event_id in StateBuilder
+**Prev:** dcc9eefbdd18b7c71f6228b4c9276c919ec5a08b8aa3a5506251363362d9a630
+**Hash:** 8a78ef815195d049599e524ba428a65ad3af83890a1532404e2529cee2ad7b06
+
