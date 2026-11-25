@@ -1,0 +1,25 @@
+[ {
+  "account_id" : "A008",
+  "trade_count" : 3,
+  "proceeds" : 769.95
+}, {
+  "account_id" : "A002",
+  "trade_count" : 3,
+  "proceeds" : 649.93
+}, {
+  "account_id" : "A003",
+  "trade_count" : 4,
+  "proceeds" : 457.14
+}, {
+  "account_id" : "A999",
+  "trade_count" : 4,
+  "proceeds" : 300.90
+}, {
+  "account_id" : "A004",
+  "trade_count" : 2,
+  "proceeds" : 269.93
+}, {
+  "account_id" : "A001",
+  "trade_count" : 3,
+  "proceeds" : 236.61
+} ]
